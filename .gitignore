@@ -18,4 +18,15 @@ Desktop.ini
 .env.*
 !.env.example
 
+# Production media (keep folder structure via .gitkeep)
+production/**/*.png
+production/**/*.jpg
+production/**/*.jpeg
+production/**/*.webp
+production/**/*.mp4
+production/**/*.mov
+production/**/*.wav
+production/**/*.mp3
+production/**/*.m4a
+
 .ai-tracker

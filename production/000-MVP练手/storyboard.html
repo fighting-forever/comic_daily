@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MVP练手：加班后的自我安慰｜导演分镜预览</title>
+  <style>
+    :root {
+      --ink: #17191f;
+      --muted: #626b78;
+      --line: #d8dde5;
+      --paper: #f7f5ef;
+      --panel: #ffffff;
+      --office: #27313f;
+      --green: #1f9d66;
+      --gold: #c99632;
+      --blue: #2f6f9f;
+      --shadow: 0 18px 45px rgba(20, 28, 39, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background: linear-gradient(180deg, rgba(247, 245, 239, .98), rgba(238, 242, 246, .98));
+      line-height: 1.6;
+    }
+
+    .page { width: min(1100px, calc(100% - 36px)); margin: 0 auto; padding: 32px 0 56px; }
+    .masthead { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr); gap: 24px; align-items: stretch; min-height: 380px; }
+    .title-block { padding: 28px 0 10px; display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { color: var(--blue); font-size: 14px; font-weight: 800; margin-bottom: 14px; }
+    h1 { margin: 0; max-width: 760px; font-size: 48px; line-height: 1.08; }
+    .lead { margin: 18px 0 0; max-width: 680px; color: var(--muted); font-size: 18px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .stat { min-width: 118px; border: 1px solid var(--line); background: rgba(255,255,255,.75); padding: 12px 14px; border-radius: 8px; }
+    .stat strong { display: block; font-size: 26px; line-height: 1.1; }
+    .stat span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .hero-frame { min-height: 380px; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); background: radial-gradient(circle at 48% 36%, rgba(255,255,255,.18) 0 14%, transparent 15%), linear-gradient(135deg, #172132, #0c1018); display: grid; place-items: center; color: rgba(255,255,255,.78); font-weight: 900; text-align: center; padding: 32px; }
+    .hero-frame span { display: block; color: #f3d78b; margin-top: 8px; }
+    .nav-strip { position: sticky; top: 0; z-index: 10; margin: 28px 0; padding: 10px; display: flex; gap: 8px; overflow-x: auto; background: rgba(247,245,239,.88); border: 1px solid rgba(216,221,229,.9); border-radius: 8px; backdrop-filter: blur(10px); }
+    .nav-strip a { flex: 0 0 auto; padding: 8px 12px; border-radius: 6px; border: 1px solid transparent; font-size: 14px; font-weight: 800; color: var(--muted); text-decoration: none; }
+    .nav-strip a:hover { border-color: var(--line); background: #fff; color: var(--ink); }
+    .section-title { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 20px 0 18px; }
+    .section-title h2 { margin: 0; font-size: 28px; line-height: 1.2; }
+    .section-title p { margin: 0; color: var(--muted); font-size: 14px; }
+    .timeline { display: grid; gap: 18px; }
+    details.shot { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 10px 28px rgba(20,28,39,.06); }
+    details.shot[open] { box-shadow: var(--shadow); }
+    summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 210px minmax(0, 1fr) 240px; align-items: center; gap: 18px; padding: 18px; }
+    summary::-webkit-details-marker { display: none; }
+    .shot-no { display: flex; align-items: center; gap: 12px; }
+    .badge { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 8px; color: #fff; background: var(--office); font-weight: 900; font-size: 18px; }
+    .duration { color: var(--muted); font-weight: 800; font-size: 14px; }
+    .shot-main h3 { margin: 0 0 4px; font-size: 20px; line-height: 1.25; }
+    .shot-main p { margin: 0; color: var(--muted); font-size: 14px; }
+    .shot-meta { justify-self: end; text-align: right; display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+    .tag { justify-self: end; display: inline-block; padding: 2px 8px; border-radius: 999px; color: #fff; background: var(--green); font-weight: 900; }
+    .tag.no { background: var(--muted); }
+    .checklist { white-space: nowrap; }
+    .shot-body { border-top: 1px solid var(--line); display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 0; }
+    .visual { min-height: 260px; border-right: 1px solid var(--line); display: grid; place-items: center; color: rgba(255,255,255,.78); font-weight: 900; text-align: center; padding: 22px; }
+    .visual.office { background: linear-gradient(135deg, #172132, #0c1018); }
+    .visual.face { background: radial-gradient(circle at 50% 40%, #dec1aa 0 18%, transparent 19%), linear-gradient(180deg, #263342, #151b23); }
+    .visual.phone { background: linear-gradient(180deg, #dbe2e7, #9ca7b1); color: #27313f; }
+    .content { padding: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .info { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: #fff; }
+    .info.wide { grid-column: 1 / -1; }
+    .info h4 { margin: 0 0 8px; font-size: 14px; color: var(--office); }
+    .info p { margin: 0; color: #38414d; font-size: 14px; }
+    .sound { border-left: 4px solid var(--green); }
+    .warning { border-left: 4px solid var(--gold); background: #fffaf0; }
+    .assets { border-left: 4px solid var(--blue); }
+    .footer { margin-top: 28px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+
+    @media (max-width: 860px) {
+      .page { width: min(100% - 24px, 680px); padding-top: 18px; }
+      .masthead, .shot-body { grid-template-columns: 1fr; }
+      h1 { font-size: 36px; }
+      summary { grid-template-columns: 1fr; gap: 10px; }
+      .shot-meta, .tag { justify-self: start; text-align: left; }
+      .visual { border-right: 0; border-bottom: 1px solid var(--line); }
+      .content { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .nav-strip { position: static; }
+      details.shot { break-inside: avoid; page-break-inside: avoid; }
+      details.shot:not([open]) .shot-body { display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="masthead" aria-label="短片概览">
+      <div class="title-block">
+        <div class="eyebrow">MVP 短视频分镜 / 3 镜独白反转</div>
+        <h1>MVP练手：加班后的自我安慰</h1>
+        <p class="lead">一个刚下班的职场人想用一句“明天一定早睡”安慰自己，却被手机日历提醒“明早 8:30 全员早会”反杀。目标是 15 秒内跑通个人工作室第一条制作闭环。</p>
+        <div class="stats">
+          <div class="stat"><strong>3</strong><span>镜头段落</span></div>
+          <div class="stat"><strong>15s</strong><span>总时长</span></div>
+          <div class="stat"><strong>★MVP</strong><span>难度等级</span></div>
+          <div class="stat"><strong>1/3</strong><span>i2v 镜数</span></div>
+          <div class="stat"><strong>10元</strong><span>预算护栏</span></div>
+        </div>
+      </div>
+      <div class="hero-frame" aria-label="封面视觉">
+        <div>深夜工位 / 手机提醒 / 切黑反转<span>23:48 → 08:30</span></div>
+      </div>
+    </section>
+
+    <nav class="nav-strip" aria-label="镜头导航">
+      <a href="#shot-01">#01 深夜工位</a>
+      <a href="#shot-02">#02 自我安慰</a>
+      <a href="#shot-03">#03 早会反杀</a>
+    </nav>
+
+    <div class="section-title">
+      <h2>分镜执行表</h2>
+      <p>首镜默认展开；打印时自动展开全部镜头。</p>
+    </div>
+
+    <section class="timeline">
+      <details class="shot" id="shot-01" open>
+        <summary>
+          <div class="shot-no"><span class="badge">#01</span><span class="duration">5秒</span></div>
+          <div class="shot-main"><h3>深夜工位，终于下班</h3><p>中远景 / 第三人称 / 静帧轻推</p></div>
+          <div class="shot-meta"><span class="tag no">i2v No</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual office">stills/1场1镜.png<br>深夜空办公室</div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>late night modern Chinese office, one tired young office worker sitting alone at desk, computer screen glow, time 23:48 implied, cinematic low-key lighting --ar 9:16</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>不做 Runway。剪映做 105% 缓慢推近即可。</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>空调底噪 + 键盘停下的轻声。旁白：“终于下班了。”</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>MVP 不追求动作，先验证氛围和开场信息是否清楚。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p>静帧：<code>stills/1场1镜.png</code>；视频：剪映导出 <code>clips/1场1镜.mp4</code>；音频：<code>audio/amb-office-night.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-02">
+        <summary>
+          <div class="shot-no"><span class="badge">#02</span><span class="duration">5秒</span></div>
+          <div class="shot-main"><h3>主角挤出乐观微笑</h3><p>近景 / 平视 / 轻微推近</p></div>
+          <div class="shot-meta"><span class="tag">i2v Yes</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual face">stills/1场2镜.png<br>疲惫但乐观的近景</div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>close-up tired young Asian office worker forcing a small optimistic smile, blue computer light on face, late night office background, realistic cinematic style --ar 9:16</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>Subtle push in, keep face identity, no large body movement.</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>主角低声：“明天一定早睡。”环境底噪稍微降低。</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>只做轻微表情和推近，不让 AI 大幅转头或做复杂嘴型。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p>静帧：<code>stills/1场2镜.png</code>；视频：<code>clips/1场2镜.mp4</code>；音频：<code>audio/vo-hope-sleep.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-03">
+        <summary>
+          <div class="shot-no"><span class="badge">#03</span><span class="duration">5秒</span></div>
+          <div class="shot-main"><h3>手机早会提醒反杀</h3><p>极特写 / 手机 POV / 通知弹出</p></div>
+          <div class="shot-meta"><span class="tag no">i2v No</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual phone">stills/1场3镜.png<br>明早 8:30 全员早会</div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>手机截图或剪映通知样式：明早 8:30 全员早会。</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>不做 Runway。剪映做通知下滑动画，随后切黑。</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>清脆通知音 + 1 秒静默。可在黑屏处加字幕：“明天再说。”</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>中文必须用真实截图或剪映文字，不用 AI 生成。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p>静帧：<code>stills/1场3镜.png</code>；视频：剪映导出 <code>clips/1场3镜.mp4</code>；音频：<code>audio/sfx-calendar-alert.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <span>生成时间：2026-05-27</span>
+      <span>工具链：Midjourney + Runway + 剪映 + DeepSeek</span>
+      <span>难度：★MVP</span>
+    </footer>
+  </main>
+</body>
+</html>

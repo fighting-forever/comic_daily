@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>办公室午休风波｜导演分镜预览</title>
+  <style>
+    :root {
+      --ink: #17191f;
+      --muted: #626b78;
+      --line: #d8dde5;
+      --paper: #f7f5ef;
+      --panel: #ffffff;
+      --office: #27313f;
+      --green: #1f9d66;
+      --gold: #c99632;
+      --red: #c64d4d;
+      --blue: #2f6f9f;
+      --shadow: 0 18px 45px rgba(20, 28, 39, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        linear-gradient(180deg, rgba(247, 245, 239, .98), rgba(238, 242, 246, .98)),
+        repeating-linear-gradient(90deg, rgba(39, 49, 63, .04) 0 1px, transparent 1px 92px);
+      line-height: 1.6;
+    }
+
+    .page { width: min(1180px, calc(100% - 36px)); margin: 0 auto; padding: 32px 0 56px; }
+    .masthead { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); gap: 24px; align-items: stretch; min-height: 420px; }
+    .title-block { padding: 30px 0 10px; display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--blue); font-size: 14px; font-weight: 800; margin-bottom: 14px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 18px 0 0 var(--gold), 36px 0 0 var(--green); }
+    h1 { margin: 0; max-width: 760px; font-size: 52px; line-height: 1.08; }
+    .lead { margin: 18px 0 0; max-width: 680px; color: var(--muted); font-size: 18px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .stat { min-width: 124px; border: 1px solid var(--line); background: rgba(255,255,255,.7); padding: 12px 14px; border-radius: 8px; }
+    .stat strong { display: block; font-size: 26px; line-height: 1.1; }
+    .stat span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .hero-frame { position: relative; min-height: 420px; background: #202936; border: 1px solid rgba(255,255,255,.2); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); isolation: isolate; }
+    .hero-frame::before { content: ""; position: absolute; inset: 0; background: linear-gradient(105deg, rgba(255,255,255,.28) 0 8%, transparent 8% 18%, rgba(255,255,255,.16) 18% 26%, transparent 26% 100%), linear-gradient(180deg, rgba(16,22,31,.3), rgba(16,22,31,.85)); z-index: 1; }
+    .office-grid { position: absolute; inset: 12% 7% 18%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .desk { position: relative; background: linear-gradient(180deg, #5b6470, #3b4450); border-radius: 4px; min-height: 78px; box-shadow: inset 0 1px 0 rgba(255,255,255,.16); }
+    .desk::before { content: ""; position: absolute; left: 18%; top: -12px; width: 42px; height: 22px; border-radius: 22px 22px 10px 10px; background: #ccb19a; box-shadow: 72px 10px 0 #a5acb5; }
+    .mailroom { position: absolute; right: 7%; bottom: 9%; width: 34%; height: 25%; border: 1px solid rgba(255,255,255,.35); background: rgba(202, 220, 228, .16); z-index: 2; }
+    .mailroom::after { content: "MAILROOM"; position: absolute; left: 12px; top: 10px; color: rgba(255,255,255,.76); font-size: 12px; font-weight: 800; }
+    .ticker { position: absolute; left: 18px; right: 18px; bottom: 16px; z-index: 3; display: flex; justify-content: space-between; align-items: center; color: #eef3f7; font-size: 13px; }
+    .timecode { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #f3d78b; }
+    .nav-strip { position: sticky; top: 0; z-index: 10; margin: 28px 0; padding: 10px; display: flex; gap: 8px; overflow-x: auto; background: rgba(247,245,239,.86); border: 1px solid rgba(216,221,229,.9); border-radius: 8px; backdrop-filter: blur(10px); }
+    .nav-strip a { flex: 0 0 auto; padding: 8px 12px; border-radius: 6px; border: 1px solid transparent; font-size: 14px; font-weight: 800; color: var(--muted); text-decoration: none; }
+    .nav-strip a:hover { border-color: var(--line); background: #fff; color: var(--ink); }
+    .section-title { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 20px 0 18px; }
+    .section-title h2 { margin: 0; font-size: 28px; line-height: 1.2; }
+    .section-title p { margin: 0; color: var(--muted); font-size: 14px; }
+    .timeline { display: grid; gap: 18px; }
+    details.shot { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 10px 28px rgba(20,28,39,.06); }
+    details.shot[open] { box-shadow: var(--shadow); }
+    summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 210px minmax(0, 1fr) 250px; align-items: center; gap: 18px; padding: 18px; }
+    summary::-webkit-details-marker { display: none; }
+    .shot-no { display: flex; align-items: center; gap: 12px; }
+    .badge { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 8px; color: #fff; background: var(--office); font-weight: 900; font-size: 18px; }
+    .duration { color: var(--muted); font-weight: 800; font-size: 14px; }
+    .shot-main h3 { margin: 0 0 4px; font-size: 20px; line-height: 1.25; }
+    .shot-main p { margin: 0; color: var(--muted); font-size: 14px; }
+    .shot-meta { justify-self: end; text-align: right; display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+    .tag { justify-self: end; display: inline-block; padding: 2px 8px; border-radius: 999px; color: #fff; background: var(--green); font-weight: 900; }
+    .tag.no { background: var(--muted); }
+    .checklist { white-space: nowrap; }
+    .shot-body { border-top: 1px solid var(--line); display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 0; }
+    .visual { min-height: 290px; background: #222a34; position: relative; overflow: hidden; border-right: 1px solid var(--line); }
+    .visual.office::before, .visual.freeze::before { content: ""; position: absolute; inset: 0; background: linear-gradient(110deg, rgba(255,255,255,.22) 0 11%, transparent 11% 27%, rgba(255,255,255,.13) 27% 35%, transparent 35%), linear-gradient(180deg, #263342, #151b23); }
+    .mini-desks { position: absolute; inset: 78px 28px 50px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .mini-desk { background: #68717d; border-radius: 4px; position: relative; }
+    .mini-desk::before { content: ""; position: absolute; width: 32px; height: 18px; border-radius: 18px 18px 8px 8px; top: -9px; left: 20px; background: #c8aa94; }
+    .visual.mail { background: linear-gradient(90deg, rgba(255,255,255,.14) 0 1px, transparent 1px 54px), linear-gradient(180deg, #2c3845, #141a21); }
+    .glass-room { position: absolute; inset: 42px 34px 48px; border: 1px solid rgba(230,238,243,.55); background: rgba(208,223,232,.15); }
+    .courier { position: absolute; left: 48%; bottom: 52px; width: 38px; height: 78px; transform: translateX(-50%); border-radius: 18px 18px 8px 8px; background: #467bb0; filter: blur(.4px); }
+    .courier::before { content: ""; position: absolute; top: -22px; left: 8px; width: 22px; height: 22px; border-radius: 50%; background: #caa48b; }
+    .visual.clerk { background: radial-gradient(circle at 50% 35%, #ebd0ba 0 18%, transparent 18%), linear-gradient(180deg, #273342, #161b23); }
+    .face { position: absolute; left: 50%; top: 60px; width: 118px; height: 138px; transform: translateX(-50%); border-radius: 44% 44% 48% 48%; background: #d5b49e; box-shadow: 0 25px 0 -10px #2d3440; }
+    .face::before, .face::after { content: ""; position: absolute; top: 58px; width: 32px; height: 6px; background: #15191f; transform: rotate(-9deg); }
+    .face::before { left: 22px; }
+    .face::after { right: 22px; transform: rotate(9deg); }
+    .glasses { position: absolute; left: 30px; top: 72px; width: 58px; height: 22px; border-left: 3px solid #161b22; border-right: 3px solid #161b22; border-top: 3px solid #161b22; }
+    .visual.phone { display: grid; place-items: center; background: linear-gradient(180deg, #dbe2e7, #9ca7b1); }
+    .phone-shell { width: 180px; height: 248px; border-radius: 24px; background: #11151b; padding: 12px; box-shadow: 0 18px 34px rgba(17,21,27,.28); }
+    .phone-screen { height: 100%; border-radius: 16px; background: #edf1f3; padding: 15px 12px; display: flex; flex-direction: column; justify-content: end; gap: 9px; }
+    .chat-title { align-self: center; margin-bottom: auto; color: #68717d; font-size: 12px; font-weight: 800; }
+    .bubble { padding: 10px 12px; border-radius: 12px; font-size: 12px; line-height: 1.45; max-width: 142px; box-shadow: 0 5px 12px rgba(0,0,0,.08); }
+    .bubble.green { align-self: flex-end; color: #fff; background: var(--green); }
+    .bubble.dark { align-self: flex-start; color: #fff; background: #24272d; border: 1px solid rgba(201,150,50,.45); }
+    .ceo { display: inline-block; color: #372302; background: linear-gradient(180deg, #f1cd78, #c99632); border-radius: 4px; padding: 1px 5px; margin-right: 4px; font-weight: 900; }
+    .visual.freeze::after { content: "13:01  13:02"; position: absolute; right: 22px; bottom: 18px; color: #f4d583; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 900; }
+    .content { padding: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .info { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: #fff; }
+    .info.wide { grid-column: 1 / -1; }
+    .info h4 { margin: 0 0 8px; font-size: 14px; color: var(--office); }
+    .info p { margin: 0; color: #38414d; font-size: 14px; }
+    .sound { border-left: 4px solid var(--green); }
+    .warning { border-left: 4px solid var(--gold); background: #fffaf0; }
+    .assets { border-left: 4px solid var(--blue); }
+    .ending { margin-top: 28px; display: grid; grid-template-columns: minmax(0, .7fr) minmax(260px, .3fr); gap: 18px; align-items: stretch; }
+    .blackout { min-height: 210px; border-radius: 8px; background: #050608; color: #fff; display: grid; place-items: center; text-align: center; box-shadow: var(--shadow); }
+    .blackout strong { display: block; font-size: 44px; line-height: 1.1; }
+    .blackout span { color: #f3d78b; font-weight: 900; margin-top: 8px; }
+    .production-note { border: 1px solid var(--line); border-radius: 8px; padding: 18px; background: var(--panel); }
+    .production-note h2 { margin: 0 0 10px; font-size: 20px; }
+    .production-note ul { margin: 0; padding-left: 20px; color: var(--muted); }
+    .production-note li + li { margin-top: 6px; }
+
+    @media (max-width: 860px) {
+      .page { width: min(100% - 24px, 680px); padding-top: 18px; }
+      .masthead, .shot-body, .ending { grid-template-columns: 1fr; }
+      h1 { font-size: 38px; }
+      .hero-frame { min-height: 330px; }
+      summary { grid-template-columns: 1fr; gap: 10px; }
+      .shot-meta { justify-self: start; text-align: left; }
+      .tag { justify-self: start; }
+      .visual { border-right: 0; border-bottom: 1px solid var(--line); }
+      .content { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .nav-strip { position: static; }
+      details.shot { break-inside: avoid; page-break-inside: avoid; }
+      details.shot:not([open]) .shot-body { display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="masthead" aria-label="短片概览">
+      <div class="title-block">
+        <div class="eyebrow"><span class="dot"></span><span>短视频分镜 HTML / 办公室反转喜剧</span></div>
+        <h1>办公室午休风波：一条群聊引爆全场死寂</h1>
+        <p class="lead">根据《午休风波》整理成可直接浏览的导演分镜页。整体节奏从压抑午休、刺耳噪音、主角爆发，到 CEO 群聊反杀，适合做 30 秒左右短视频。</p>
+        <div class="stats">
+          <div class="stat"><strong>6</strong><span>镜头段落</span></div>
+          <div class="stat"><strong>30s</strong><span>总时长</span></div>
+          <div class="stat"><strong>★★★</strong><span>挑战难度</span></div>
+          <div class="stat"><strong>4/6</strong><span>i2v 镜数</span></div>
+          <div class="stat"><strong>50元</strong><span>预算护栏</span></div>
+        </div>
+      </div>
+      <div class="hero-frame" aria-label="现代办公室午休氛围图形">
+        <div class="office-grid">
+          <div class="desk"></div><div class="desk"></div><div class="desk"></div>
+          <div class="desk"></div><div class="desk"></div><div class="desk"></div>
+        </div>
+        <div class="mailroom"></div>
+        <div class="ticker"><span>DIM OFFICE / LUNCH BREAK</span><span class="timecode">13:00</span></div>
+      </div>
+    </section>
+
+    <nav class="nav-strip" aria-label="镜头导航">
+      <a href="#shot-01">#01 午休全景</a>
+      <a href="#shot-02">#02 噪音出现</a>
+      <a href="#shot-03">#03 主角醒来</a>
+      <a href="#shot-04">#04 群聊发难</a>
+      <a href="#shot-05">#05 全场凝固</a>
+      <a href="#shot-06">#06 CEO 反杀</a>
+    </nav>
+
+    <div class="section-title">
+      <h2>分镜执行表</h2>
+      <p>首镜默认展开；打印时全部展开。</p>
+    </div>
+
+    <section class="timeline">
+      <details class="shot" id="shot-01" open>
+        <summary>
+          <div class="shot-no"><span class="badge">#01</span><span class="duration">4秒</span></div>
+          <div class="shot-main"><h3>午休中的大厂办公室</h3><p>全景 Wide Shot / 固定机位，微弱呼吸感</p></div>
+          <div class="shot-meta"><span class="tag">i2v Yes</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual office"><div class="mini-desks"><span class="mini-desk"></span><span class="mini-desk"></span><span class="mini-desk"></span><span class="mini-desk"></span></div></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>Inside a large modern Chinese corporate office, dim moody lighting, dozens of real Asian employees sleeping at their cubicle desks at 1:00 PM, heavy window shadows, photorealistic, 8k, raw photo.</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>Static shot, subtle breathing motion, tiny dust motes floating slowly in the dim light.</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>[BGM] 极其微弱、压抑的低频合成器氛围音渐入。<br>[SFX] 中央空调低频嗡鸣、远处隐约城市车流声。</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>【大厂控本秘诀】全景不要看清任何人脸，纯靠空气感和光影交代环境，省去人脸出错成本。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p><code>stills/1场1镜.png</code> / <code>clips/1场1镜.mp4</code> / <code>audio/bgm-office-ambient.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-02">
+        <summary>
+          <div class="shot-no"><span class="badge">#02</span><span class="duration">4秒</span></div>
+          <div class="shot-main"><h3>玻璃邮件室传来刺耳噪声</h3><p>特写 Close-up / 主观视角 POV，微推</p></div>
+          <div class="shot-meta"><span class="tag">i2v Yes</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual mail"><div class="glass-room"></div><div class="courier"></div></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>POV shot looking at a semi-transparent glass mailroom nearby, blurry background office, a courier boy in uniform working inside, high contrast, cinematic photography.</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>Camera slowly tracking forward, sharp focus on the glass room reflection.</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>[SFX] 骤然炸裂！尖锐刺耳的塑料撕扯声（嗤啦——！），紧接着重物砸在地板上的钝响（哐当！）。</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>【动作防融化秘诀】不要让 AI 画撕胶带的手。直接拍空间和玻璃房，动作全靠后期巨大刺耳音效骗观众的耳朵。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p><code>stills/1场2镜.png</code> / <code>clips/1场2镜.mp4</code> / <code>audio/sfx-tape-box.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-03">
+        <summary>
+          <div class="shot-no"><span class="badge">#03</span><span class="duration">5秒</span></div>
+          <div class="shot-main"><h3>小职员暴躁惊醒</h3><p>近景 Medium Close-up / 希区柯克变焦，突进</p></div>
+          <div class="shot-meta"><span class="tag">i2v Yes</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual clerk"><div class="face"><span class="glasses"></span></div></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>A young Asian male office clerk with glasses abruptly waking up at his desk, extremely frustrated and angry facial expression, sharp eyes looking to the side, realistic skin texture with desk marks on cheek.</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>Dolly zoom, camera suddenly pulls back, the character's facial muscles tense up with annoyance, background blurs.</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>[台词（可选 ElevenLabs 升级）] 内心独白，暴躁、压抑的低语：“受不了了……还让不让人睡了……！！”</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>【角色一致性秘诀】这张图在 Midjourney（或 LiblibAI 备选）跑出最满意的效果后，立即将其作为基础 [主角小职员-ID]。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p><code>stills/1场3镜.png</code> / <code>clips/1场3镜.mp4</code> / <code>audio/vo-clerk-inner.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-04">
+        <summary>
+          <div class="shot-no"><span class="badge">#04</span><span class="duration">5秒</span></div>
+          <div class="shot-main"><h3>群聊里发出午休警告</h3><p>极特写 Macro Shot / 静止</p></div>
+          <div class="shot-meta"><span class="tag no">i2v No</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual phone"><div class="phone-shell"><div class="phone-screen"><div class="chat-title">公司大群</div><div class="bubble green">大中午的能不能有点自觉，没看到别人都是午睡吗？</div></div></div></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>Extreme close-up of a smartphone screen showing a professional company group chat interface, a fresh green text bubble pops up rapidly at the bottom, hyper-realistic glass texture.</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>不用 Runway。手机截图或剪映文本层，做 2-4 帧气泡弹出动画即可。</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>[SFX] 密集的手机虚拟键盘打字声，随后一声清脆的“咻”消息发送音。<br>[字幕压字] 群聊框内弹出原文。</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>【100% 零成本秘诀】完全抛弃 AI 绘图。直接用手机在微信/钉钉里自己发一段，截屏后拖进剪映做裁切，清晰度最高，0 成本。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p><code>stills/2场1镜.png</code> / 剪映动画 / <code>audio/sfx-message-send.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-05">
+        <summary>
+          <div class="shot-no"><span class="badge">#05</span><span class="duration">4秒</span></div>
+          <div class="shot-main"><h3>全办公室空气凝固</h3><p>全景 Wide Shot / 定格无运动</p></div>
+          <div class="shot-meta"><span class="tag no">i2v No</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual freeze"><div class="mini-desks"><span class="mini-desk"></span><span class="mini-desk"></span><span class="mini-desk"></span><span class="mini-desk"></span></div></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>Same office environment as shot 01, all employees and the courier guy completely frozen in place, awkward silence, realistic corporate workspace, heavy shadows.</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>Zero motion, completely frozen frame. 剪映加时间戳 13:01 → 13:02。</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>[BGM] 所有背景音乐和环境音瞬间断崖式切断，全场死寂。<br>[SFX] 墙上时钟冰冷的“滴答、滴答”声。</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>【戏剧张力秘诀】利用剪映在右下角压上时间戳动画：13:01… 13:02… 制造空气凝固的体感。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p><code>stills/2场2镜.png</code> / 剪映定格 / <code>audio/sfx-clock-tick.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-06">
+        <summary>
+          <div class="shot-no"><span class="badge">#06</span><span class="duration">8秒</span></div>
+          <div class="shot-main"><h3>CEO 群聊反杀，全剧终</h3><p>特写 Close-up / 微震，震荡</p></div>
+          <div class="shot-meta"><span class="tag">i2v Yes</span><span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span></div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual phone"><div class="phone-shell"><div class="phone-screen"><div class="chat-title">公司大群</div><div class="bubble dark"><span class="ceo">CEO</span>来公司8年了，我怎么不知道有午休？</div></div></div></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>Extreme close-up of the same smartphone group chat interface, a premium dark chat bubble with a shiny golden CEO label badge instantly pops up at the bottom.</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>可不跑 Runway，剪映里在新气泡出现瞬间做 sharp micro-shake，然后 fades to black。</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>[SFX] 一声沉重的法槌敲击声，或恐怖片心脏骤停重音。<br>[字幕压字] CEO 尊贵金色头像框弹出致命一击。</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>【终极爆款秘诀】同样用手机录屏/截屏做。CEO 的台词一出，画面配合重音震一下，然后瞬间切黑屏，闪现大字《全剧终》。</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p><code>stills/2场3镜.png</code> / <code>clips/2场3镜.mp4</code> / <code>audio/sfx-gavel-hit.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="ending" aria-label="结尾建议">
+      <div class="blackout"><div><strong>全剧终</strong><span>CEO 致命一击后切黑</span></div></div>
+      <div class="production-note">
+        <h2>制作提示</h2>
+        <ul>
+          <li>前 3 镜主要靠低频和环境压抑感建立午休氛围。</li>
+          <li>第 4、5 镜建议直接使用真实手机截图、剪映字幕和定格。</li>
+          <li>第 6 镜重音、震动、切黑比复杂 i2v 更重要。</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

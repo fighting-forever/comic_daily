@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}｜导演分镜预览</title>
+  <style>
+    :root {
+      --ink: #17191f;
+      --muted: #626b78;
+      --line: #d8dde5;
+      --paper: #f7f5ef;
+      --panel: #ffffff;
+      --office: #27313f;
+      --green: #1f9d66;
+      --gold: #c99632;
+      --red: #c64d4d;
+      --blue: #2f6f9f;
+      --shadow: 0 18px 45px rgba(20, 28, 39, .12);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        linear-gradient(180deg, rgba(247, 245, 239, .98), rgba(238, 242, 246, .98)),
+        repeating-linear-gradient(90deg, rgba(39, 49, 63, .04) 0 1px, transparent 1px 92px);
+      line-height: 1.6;
+    }
+
+    .page { width: min(1180px, calc(100% - 36px)); margin: 0 auto; padding: 32px 0 56px; }
+    .masthead { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr); gap: 24px; align-items: stretch; min-height: 420px; }
+    .title-block { padding: 30px 0 10px; display: flex; flex-direction: column; justify-content: center; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--blue); font-size: 14px; font-weight: 800; margin-bottom: 14px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--red); box-shadow: 18px 0 0 var(--gold), 36px 0 0 var(--green); }
+    h1 { margin: 0; max-width: 760px; font-size: 52px; line-height: 1.08; }
+    .lead { margin: 18px 0 0; max-width: 680px; color: var(--muted); font-size: 18px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
+    .stat { min-width: 124px; border: 1px solid var(--line); background: rgba(255,255,255,.7); padding: 12px 14px; border-radius: 8px; }
+    .stat strong { display: block; font-size: 26px; line-height: 1.1; }
+    .stat span { display: block; color: var(--muted); font-size: 13px; margin-top: 4px; }
+    .hero-frame { position: relative; min-height: 420px; background: linear-gradient(135deg, #202936, #10151d); border: 1px solid rgba(255,255,255,.2); border-radius: 8px; overflow: hidden; box-shadow: var(--shadow); }
+    .hero-frame img { width: 100%; height: 100%; min-height: 420px; object-fit: cover; display: block; }
+    .hero-frame img[src=""] { display: none; }
+    .hero-placeholder { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,.72); font-weight: 900; letter-spacing: .04em; background: linear-gradient(110deg, rgba(255,255,255,.16) 0 12%, transparent 12% 28%, rgba(255,255,255,.09) 28% 36%, transparent 36%); }
+    .nav-strip { position: sticky; top: 0; z-index: 10; margin: 28px 0; padding: 10px; display: flex; gap: 8px; overflow-x: auto; background: rgba(247,245,239,.86); border: 1px solid rgba(216,221,229,.9); border-radius: 8px; backdrop-filter: blur(10px); }
+    .nav-strip a { flex: 0 0 auto; padding: 8px 12px; border-radius: 6px; border: 1px solid transparent; font-size: 14px; font-weight: 800; color: var(--muted); text-decoration: none; }
+    .nav-strip a:hover { border-color: var(--line); background: #fff; color: var(--ink); }
+    .section-title { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin: 20px 0 18px; }
+    .section-title h2 { margin: 0; font-size: 28px; line-height: 1.2; }
+    .section-title p { margin: 0; color: var(--muted); font-size: 14px; }
+    .timeline { display: grid; gap: 18px; }
+    details.shot { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; box-shadow: 0 10px 28px rgba(20,28,39,.06); }
+    details.shot[open] { box-shadow: var(--shadow); }
+    summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 210px minmax(0, 1fr) 240px; align-items: center; gap: 18px; padding: 18px; }
+    summary::-webkit-details-marker { display: none; }
+    .shot-no { display: flex; align-items: center; gap: 12px; }
+    .badge { width: 58px; height: 58px; display: grid; place-items: center; border-radius: 8px; color: #fff; background: var(--office); font-weight: 900; font-size: 18px; }
+    .duration { color: var(--muted); font-weight: 800; font-size: 14px; }
+    .shot-main h3 { margin: 0 0 4px; font-size: 20px; line-height: 1.25; }
+    .shot-main p { margin: 0; color: var(--muted); font-size: 14px; }
+    .shot-meta { justify-self: end; text-align: right; display: grid; gap: 6px; color: var(--muted); font-size: 13px; }
+    .tag { justify-self: end; display: inline-block; padding: 2px 8px; border-radius: 999px; color: #fff; background: var(--green); font-weight: 900; }
+    .tag.no { background: var(--muted); }
+    .checklist { white-space: nowrap; }
+    .shot-body { border-top: 1px solid var(--line); display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 0; }
+    .visual { min-height: 290px; background: linear-gradient(135deg, #222a34, #121820); position: relative; overflow: hidden; border-right: 1px solid var(--line); display: grid; place-items: center; color: rgba(255,255,255,.72); font-weight: 900; }
+    .visual img { width: 100%; height: 100%; min-height: 290px; object-fit: cover; display: block; }
+    .visual img[src=""] { display: none; }
+    .content { padding: 20px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .info { border: 1px solid var(--line); border-radius: 8px; padding: 14px; background: #fff; }
+    .info.wide { grid-column: 1 / -1; }
+    .info h4 { margin: 0 0 8px; font-size: 14px; color: var(--office); }
+    .info p { margin: 0; color: #38414d; font-size: 14px; }
+    .sound { border-left: 4px solid var(--green); }
+    .warning { border-left: 4px solid var(--gold); background: #fffaf0; }
+    .assets { border-left: 4px solid var(--blue); }
+    .footer { margin-top: 28px; color: var(--muted); font-size: 13px; display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+
+    @media (max-width: 860px) {
+      .page { width: min(100% - 24px, 680px); padding-top: 18px; }
+      .masthead, .shot-body { grid-template-columns: 1fr; }
+      h1 { font-size: 38px; }
+      .hero-frame, .hero-frame img { min-height: 330px; }
+      summary { grid-template-columns: 1fr; gap: 10px; }
+      .shot-meta { justify-self: start; text-align: left; }
+      .tag { justify-self: start; }
+      .visual { border-right: 0; border-bottom: 1px solid var(--line); }
+      .content { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; }
+      .nav-strip { position: static; }
+      details.shot { break-inside: avoid; page-break-inside: avoid; }
+      details.shot:not([open]) .shot-body { display: grid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="masthead" aria-label="短片概览">
+      <div class="title-block">
+        <div class="eyebrow"><span class="dot"></span><span>{{GENRE}} / {{FORMAT}}</span></div>
+        <h1>{{TITLE}}</h1>
+        <p class="lead">{{LOGLINE}}</p>
+        <div class="stats">
+          <div class="stat"><strong>{{SHOT_COUNT}}</strong><span>镜头段落</span></div>
+          <div class="stat"><strong>{{DURATION}}</strong><span>总时长</span></div>
+          <div class="stat"><strong>{{DIFFICULTY}}</strong><span>难度等级</span></div>
+          <div class="stat"><strong>{{I2V_COUNT}}</strong><span>i2v 镜数</span></div>
+          <div class="stat"><strong>{{BUDGET}}</strong><span>预算上限</span></div>
+        </div>
+      </div>
+      <div class="hero-frame" aria-label="封面视觉">
+        <img src="{{COVER_IMAGE}}" alt="{{TITLE}}封面" />
+        <div class="hero-placeholder">COVER / {{TITLE}}</div>
+      </div>
+    </section>
+
+    <nav class="nav-strip" aria-label="镜头导航">
+      <a href="#shot-01">#01 {{SHOT_01_TITLE}}</a>
+      <a href="#shot-02">#02 {{SHOT_02_TITLE}}</a>
+      <a href="#shot-03">#03 {{SHOT_03_TITLE}}</a>
+    </nav>
+
+    <div class="section-title">
+      <h2>分镜执行表</h2>
+      <p>首镜默认展开；打印时自动展开全部镜头。</p>
+    </div>
+
+    <section class="timeline">
+      <details class="shot" id="shot-01" open>
+        <summary>
+          <div class="shot-no"><span class="badge">#01</span><span class="duration">{{SHOT_01_DURATION}}</span></div>
+          <div class="shot-main">
+            <h3>{{SHOT_01_TITLE}}</h3>
+            <p>{{SHOT_01_CAMERA}}</p>
+          </div>
+          <div class="shot-meta">
+            <span class="tag">{{SHOT_01_I2V}}</span>
+            <span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span>
+          </div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual"><img src="{{SHOT_01_STILL}}" alt="{{SHOT_01_TITLE}}" /><span>{{SHOT_01_VISUAL_PLACEHOLDER}}</span></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>{{SHOT_01_MJ_PROMPT}}</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>{{SHOT_01_I2V_PROMPT}}</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>{{SHOT_01_AUDIO}}</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>{{SHOT_01_RISK}}</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p>静帧：<code>stills/{{SHOT_01_ID}}.png</code>；视频：<code>clips/{{SHOT_01_ID}}.mp4</code>；音频：<code>audio/{{SHOT_01_ID}}-*.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+
+      <details class="shot" id="shot-02">
+        <summary>
+          <div class="shot-no"><span class="badge">#02</span><span class="duration">{{SHOT_02_DURATION}}</span></div>
+          <div class="shot-main">
+            <h3>{{SHOT_02_TITLE}}</h3>
+            <p>{{SHOT_02_CAMERA}}</p>
+          </div>
+          <div class="shot-meta">
+            <span class="tag no">{{SHOT_02_I2V}}</span>
+            <span class="checklist">☐ 静帧 ☐ 视频 ☐ 音频 ☐ 已剪入</span>
+          </div>
+        </summary>
+        <div class="shot-body">
+          <div class="visual"><img src="{{SHOT_02_STILL}}" alt="{{SHOT_02_TITLE}}" /><span>{{SHOT_02_VISUAL_PLACEHOLDER}}</span></div>
+          <div class="content">
+            <div class="info wide"><h4>画面视觉描述</h4><p>{{SHOT_02_MJ_PROMPT}}</p></div>
+            <div class="info"><h4>视频动态控制</h4><p>{{SHOT_02_I2V_PROMPT}}</p></div>
+            <div class="info sound"><h4>声音设计</h4><p>{{SHOT_02_AUDIO}}</p></div>
+            <div class="info warning wide"><h4>避坑/风险</h4><p>{{SHOT_02_RISK}}</p></div>
+            <div class="info assets wide"><h4>资产路径</h4><p>静帧：<code>stills/{{SHOT_02_ID}}.png</code>；视频：<code>clips/{{SHOT_02_ID}}.mp4</code>；音频：<code>audio/{{SHOT_02_ID}}-*.mp3</code></p></div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <footer class="footer">
+      <span>生成时间：{{GENERATED_AT}}</span>
+      <span>工具版本：{{TOOLCHAIN}}</span>
+      <span>难度：{{DIFFICULTY}}</span>
+    </footer>
+  </main>
+</body>
+</html>
